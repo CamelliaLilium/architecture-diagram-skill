@@ -1,0 +1,47 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '20px', 'fontFamily': 'Microsoft YaHei, Arial'}}}%%
+graph TB
+    %% 替换为实际的服务名、镜像名称和端口
+    %% 状态标记：✅ 已就绪  ⚠️ 部分就绪  ❌ 未就绪  🔄 构建中
+
+    subgraph Core["Phase A: 核心层 — docker compose up -d"]
+        %% 替换为实际的基础设施服务
+        DB["PostgreSQL :5432<br/>postgres:16-alpine<br/>主数据库<br/>状态: ✅"]
+        Cache["Redis :6379<br/>redis:7-alpine<br/>会话缓存<br/>状态: ✅"]
+    end
+
+    subgraph Mid["Phase B: 中间件层 — --profile middleware"]
+        %% 替换为实际的中间件服务（如：API网关、消息队列、对象存储）
+        GW["API Gateway :3000<br/>Kong / Nginx<br/>路由与鉴权<br/>状态: ✅"]
+        Auth["Auth Service :9999<br/>认证服务<br/>JWT / OAuth2<br/>状态: ⚠️"]
+    end
+
+    subgraph App["Phase C: 应用层 — --profile app"]
+        %% 替换为实际的业务应用服务
+        API["Backend :8080<br/>FastAPI / Spring Boot<br/>业务API服务<br/>状态: ✅"]
+        FE["Frontend :8501<br/>Web UI<br/>用户界面<br/>状态: ✅"]
+    end
+
+    subgraph Future["Phase D: 扩展层 — 规划中（未就绪）"]
+        %% 替换为待构建的扩展服务
+        SvcA["服务A<br/>功能描述<br/>待构建"]
+        SvcB["服务B<br/>功能描述<br/>待构建"]
+    end
+
+    %% 替换依赖关系为实际的服务启动顺序
+    DB --> GW
+    Cache --> Auth
+    Core --> Mid
+    Mid --> App
+    App -.->|"规划依赖"| Future
+
+    %% 替换通信协议为实际使用方式
+    API -->|"SQL / ORM"| DB
+    API -->|"Redis 协议"| Cache
+    FE -->|"HTTP / SSE"| API
+    FE -->|"REST"| GW
+    API -->|"JWT 验证"| Auth
+
+    style Core fill:#f8faf9,stroke:#699261,stroke-width:2px
+    style Mid fill:#f5fefd,stroke:#23a5b4,stroke-width:2px
+    style App fill:#f6f9fe,stroke:#3285c2,stroke-width:2px
+    style Future fill:#fef5f6,stroke:#c80705,stroke-width:2px,stroke-dasharray:5 5

@@ -1,0 +1,29 @@
+C4Context
+    %% C4 上下文图：描述系统与外部角色/系统的边界关系
+    %% 替换 title 中的 [系统名称] 为实际项目名
+    title 系统上下文图 — [系统名称]
+
+    %% 替换 user 的描述为实际用户角色（如：保险顾问、电商买家）
+    Person(user, "用户", "使用系统的主要角色，完成核心业务操作")
+
+    %% 替换 admin 为实际的管理角色（如无则删除）
+    Person_Ext(admin, "管理员", "维护系统配置与数据")
+
+    %% 替换 system 的描述为本系统的核心职责（一句话概括）
+    System(system, "本系统", "系统的核心职责描述，为用户提供XX能力")
+
+    %% 替换外部系统名和描述为实际依赖的第三方服务
+    System_Ext(ext1, "外部系统A", "提供XX能力（如：支付、短信、认证）")
+    System_Ext(ext2, "外部系统B", "提供YY能力（如：地图、推荐、翻译）")
+
+    %% 替换外部数据源为实际数据提供方
+    SystemDb_Ext(extdb, "外部数据源", "提供ZZ数据（如：行情、产品目录、用户画像）")
+
+    %% 替换关系描述和协议为实际交互方式
+    Rel(user, system, "使用", "HTTPS/浏览器")
+    Rel(admin, system, "管理", "HTTPS/管理后台")
+    Rel(system, ext1, "调用", "REST API")
+    Rel(system, ext2, "调用", "gRPC")
+    Rel(system, extdb, "查询", "SQL / HTTP")
+
+    UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="1")

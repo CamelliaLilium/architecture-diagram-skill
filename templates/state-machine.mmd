@@ -1,0 +1,71 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '20px', 'fontFamily': 'Microsoft YaHei, Arial'}}}%%
+stateDiagram-v2
+    %% 替换状态名和转换条件为实际业务逻辑
+    %% 状态命名建议：动词+名词，如 ValidateInput、ProcessOrder、NotifyUser
+
+    [*] --> Router: 请求到达
+
+    state Router {
+        %% 替换为实际的路由校验逻辑
+        [*] --> Validate: 参数校验
+        Validate --> Classify: 校验通过
+        Validate --> [*]: 校验失败（返回400）
+        Classify --> RouteResult: 分类完成
+    }
+
+    %% <<choice>> 表示分支决策节点，替换为实际路由条件
+    state RouteResult <<choice>>
+
+    Router --> RouteResult
+
+    %% 替换条件描述为实际业务判断（如：用户类型 / 请求意图 / 数据状态）
+    RouteResult --> HandlerA: 条件A（如：查询类请求）
+    RouteResult --> HandlerB: 条件B（如：计算类请求）
+    RouteResult --> HandlerC: 条件C（如：推荐类请求）
+    RouteResult --> DefaultHandler: 默认兜底处理
+
+    state HandlerA {
+        %% 替换为实际的处理步骤（如：数据查询流程）
+        [*] --> StepA1: 加载数据
+        StepA1 --> StepA2: 过滤处理
+        StepA2 --> StepA3: 格式化输出
+    }
+
+    state HandlerB {
+        %% 替换为实际的计算步骤（如：保费计算、评分计算）
+        [*] --> StepB1: 获取输入参数
+        StepB1 --> StepB2: 执行计算模型
+        StepB2 --> StepB3: 校验计算结果
+    }
+
+    state HandlerC {
+        %% 替换为实际的推荐/排序步骤
+        [*] --> StepC1: 候选集筛选
+        StepC1 --> StepC2: 评分与排序
+        StepC2 --> StepC3: 生成推荐列表
+    }
+
+    state DefaultHandler {
+        %% 替换为实际的默认处理逻辑
+        [*] --> SimpleReply: 生成通用回复
+    }
+
+    %% 替换返回描述为实际的输出类型
+    HandlerA --> [*]: 返回查询结果
+    HandlerB --> [*]: 返回计算结果
+    HandlerC --> [*]: 返回推荐列表
+    DefaultHandler --> [*]: 返回默认回复
+
+    note right of Router
+        路由策略：
+        1. 快速规则匹配
+        2. 意图分类器
+        3. 默认兜底逻辑
+    end note
+
+    note right of HandlerC
+        推荐策略：
+        - 协同过滤
+        - 内容匹配
+        - 规则优先级
+    end note

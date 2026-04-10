@@ -1,0 +1,47 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '20px', 'fontFamily': 'Microsoft YaHei, Arial'}}}%%
+sequenceDiagram
+    %% 替换 participant 为实际的系统角色和服务名
+    %% as 后面是显示名，格式：participant 变量名 as 显示名 :端口
+
+    participant U as 用户
+    participant FE as 前端 :8501
+    participant API as API服务 :8080
+    participant SVC as 业务服务
+    participant DB as 数据库
+    participant EXT as 外部API
+
+    %% 替换阶段描述为实际业务流程名
+    Note over U,EXT: 第1阶段：用户发起请求
+
+    %% 替换请求路径、参数名和业务描述
+    U->>FE: 用户操作（点击/输入）
+    FE->>API: POST /api/action {payload}
+    API->>API: 验证参数 + 加载会话上下文
+    API->>SVC: 调用业务逻辑（传入上下文）
+
+    Note over SVC: 业务处理中
+
+    %% 替换SQL描述为实际查询语义
+    SVC->>DB: SQL查询（如：SELECT * FROM products WHERE ...）
+    DB-->>SVC: 返回数据集
+
+    %% 替换外部API调用为实际第三方服务（如无则删除）
+    SVC->>EXT: 调用外部API（如：AI推理 / 支付 / 短信）
+    EXT-->>SVC: 返回结果
+
+    SVC-->>API: 处理结果（结构化数据）
+
+    %% 替换响应格式为实际使用的格式（SSE / JSON / Stream）
+    API-->>FE: SSE 流式响应 / JSON
+    FE-->>U: 渲染展示结果
+
+    Note over U,EXT: 第2阶段：后续交互（如有多轮则复制此段）
+
+    U->>FE: 后续操作（如：确认 / 修改 / 查询详情）
+    FE->>API: POST /api/next {session_id, payload}
+    API->>SVC: 继续处理（携带上下文）
+    SVC->>DB: 写入/更新数据
+    DB-->>SVC: 确认写入
+    SVC-->>API: 最终处理结果
+    API-->>FE: 响应（含状态码）
+    FE-->>U: 展示最终结果 / 跳转页面

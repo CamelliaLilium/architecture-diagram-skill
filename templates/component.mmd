@@ -1,0 +1,54 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '20px', 'fontFamily': 'Microsoft YaHei, Arial'}}}%%
+graph TB
+    %% 替换为实际的模块名和交互关系
+    %% 子图代表架构层次，节点代表具体模块或服务
+
+    subgraph Input["输入层 — 接入与解析"]
+        %% 替换为实际的入口类型（如：HTTP请求、消息队列、文件上传）
+        REQ["用户请求<br/>HTTP / WebSocket"]
+        EVENT["系统事件<br/>定时任务 / 消息触发"]
+    end
+
+    subgraph Core["核心模块 — 业务编排"]
+        %% 替换为实际的业务模块（如：订单服务、用户服务、风控服务）
+        ModA["模块A<br/>职责：输入解析与路由"]
+        ModB["模块B<br/>职责：业务规则执行"]
+        ModC["模块C<br/>职责：数据整合与聚合"]
+    end
+
+    subgraph Engine["计算引擎层 — 算法与推理"]
+        %% 替换为实际的计算引擎（如：ML模型、规则引擎、评分算法）
+        EngA["引擎A<br/>核心算法 / 规则匹配"]
+        EngB["引擎B<br/>评估打分 / 排序优化"]
+    end
+
+    subgraph Store["存储层 — 数据持久化"]
+        %% 替换为实际的存储组件
+        DB[("主数据库<br/>PostgreSQL / MySQL")]
+        Cache[("缓存<br/>Redis")]
+    end
+
+    subgraph Output["输出层 — 响应与通知"]
+        %% 替换为实际的输出形式（如：流式输出、批量导出、推送通知）
+        RESP["API 响应<br/>JSON / SSE 流式"]
+        NOTIFY["异步通知<br/>邮件 / 推送 / Webhook"]
+    end
+
+    %% 替换箭头标签为实际的数据/消息类型
+    REQ --> ModA
+    EVENT --> ModB
+    ModA -->|"结构化数据"| EngA
+    ModB -->|"业务参数"| EngB
+    ModC -->|"聚合输入"| EngA
+    ModC -->|"聚合输入"| EngB
+    ModA -->|"持久化"| DB
+    ModB -->|"读取配置"| Cache
+    EngA -->|"计算结果"| RESP
+    EngB -->|"评分结果"| RESP
+    ModA -.->|"异步触发"| NOTIFY
+
+    style Input  fill:#f6f9fe,stroke:#3285c2,stroke-width:2px
+    style Core   fill:#fffbf5,stroke:#ff8000,stroke-width:2px
+    style Engine fill:#f9f7fa,stroke:#834d9d,stroke-width:2px
+    style Store  fill:#f8faf9,stroke:#699261,stroke-width:2px
+    style Output fill:#f5fefd,stroke:#23a5b4,stroke-width:2px

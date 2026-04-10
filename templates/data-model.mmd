@@ -1,0 +1,57 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '20px', 'fontFamily': 'Microsoft YaHei, Arial'}}}%%
+erDiagram
+    %% 替换为实际的表名和字段
+    %% 关系符号说明：||--o{ 一对多  ||--|| 一对一  }o--o{ 多对多
+
+    %% 替换实体名为实际业务表名（如：companies → insurers）
+    companies ||--o{ products : "发行"
+    users ||--o{ orders : "下单"
+    products ||--o{ orders : "包含"
+    users ||--o{ sessions : "持有"
+
+    %% 替换字段名、类型和注释为实际数据库列定义
+    companies {
+        int id PK "主键"
+        varchar name "公司名称"
+        varchar short_name "简称"
+        varchar official_url "官网URL"
+        timestamp created_at "创建时间"
+    }
+
+    products {
+        int id PK "主键"
+        int company_id FK "所属公司"
+        varchar product_name "产品名称"
+        enum status "在售/停售"
+        decimal price "价格"
+        jsonb config "扩展配置 JSONB"
+        timestamp created_at "创建时间"
+        timestamp updated_at "更新时间"
+    }
+
+    users {
+        int id PK "主键"
+        varchar username "用户名"
+        varchar email "邮箱"
+        varchar phone "手机号"
+        jsonb profile "用户画像 JSONB"
+        timestamp created_at "注册时间"
+    }
+
+    orders {
+        int id PK "主键"
+        int user_id FK "用户ID"
+        int product_id FK "产品ID"
+        decimal amount "金额"
+        enum status "待支付/已完成/已取消"
+        timestamp created_at "下单时间"
+    }
+
+    %% 替换 sessions 为实际的会话/日志表（如无则删除）
+    sessions {
+        varchar id PK "会话ID（UUID）"
+        int user_id FK "用户ID"
+        jsonb context "会话上下文 JSONB"
+        timestamp expires_at "过期时间"
+        timestamp created_at "创建时间"
+    }

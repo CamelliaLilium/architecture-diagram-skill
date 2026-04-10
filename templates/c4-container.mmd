@@ -1,0 +1,36 @@
+C4Container
+    %% C4 容器图：描述系统内部各容器（进程/服务）及其交互
+    %% 替换 title 中的 [系统名称] 为实际项目名
+    title 容器图 — [系统名称]
+
+    %% 替换用户角色描述
+    Person(user, "用户", "系统使用者")
+
+    %% 替换 boundary 标签为实际系统名称
+    System_Boundary(boundary, "系统名称") {
+        %% 替换容器名、技术栈和职责描述
+        Container(web, "Web应用", "Vue.js / React", "提供用户界面，处理前端交互逻辑")
+        Container(api, "API服务", "FastAPI / Spring Boot", "处理业务逻辑，提供RESTful接口")
+
+        %% 替换消息队列（如无异步处理则删除）
+        Container(mq, "消息队列", "RabbitMQ / Kafka", "异步任务分发与解耦")
+
+        %% 替换数据库类型（PostgreSQL / MySQL / MongoDB）
+        ContainerDb(db, "主数据库", "PostgreSQL", "存储核心业务数据")
+
+        %% 替换缓存用途（会话 / 热数据 / 分布式锁）
+        ContainerDb(cache, "缓存", "Redis", "会话缓存与高频数据加速")
+    }
+
+    %% 替换外部服务描述
+    System_Ext(ext, "外部服务", "第三方API（如：支付、短信、AI模型）")
+
+    %% 替换交互协议为实际通信方式
+    Rel(user, web, "访问", "HTTPS")
+    Rel(web, api, "调用", "REST / SSE")
+    Rel(api, db, "读写", "SQL / ORM")
+    Rel(api, cache, "缓存", "Redis 协议")
+    Rel(api, mq, "发布消息", "AMQP")
+    Rel(api, ext, "调用", "HTTPS / REST")
+
+    UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="1")

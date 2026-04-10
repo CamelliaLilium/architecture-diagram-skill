@@ -1,0 +1,54 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '20px', 'fontFamily': 'Microsoft YaHei, Arial'}}}%%
+graph TB
+    %% 替换 User 标签为实际用户角色（如：管理员、客户、运营人员）
+    User["fa:fa-user 用户"]
+
+    %% 替换 ExtA/ExtB 为实际外部系统（如：支付平台、短信网关、第三方API）
+    ExtA["fa:fa-cloud 外部系统A<br/>第三方服务"]
+    ExtB["fa:fa-database 外部系统B<br/>数据提供方"]
+
+    subgraph L1["前端层 — 用户交互与展示"]
+        %% 替换服务名、端口和描述
+        FE["前端应用 :8501<br/>Web UI + 可视化"]
+    end
+
+    subgraph L2["API 网关层 — 路由分发与会话管理"]
+        %% 替换为实际的网关框架（如：FastAPI、Nginx、Kong）
+        API["API 服务 :8080<br/>请求路由 + 认证鉴权"]
+        GW["网关 :3000<br/>限流 + 负载均衡"]
+    end
+
+    subgraph L3["业务编排层 — 核心处理"]
+        %% 替换为实际的业务服务（如：订单服务、用户服务、推荐引擎）
+        SvcA["服务A<br/>核心业务逻辑"]
+        SvcB["服务B<br/>辅助业务逻辑"]
+        SvcC["服务C<br/>异步任务处理"]
+    end
+
+    subgraph L4["计算引擎层 — 算法与规则"]
+        %% 替换为实际的计算模块（如：AI推理、规则引擎、评分模型）
+        EngA["引擎A<br/>核心算法"]
+        EngB["引擎B<br/>评分/排序"]
+    end
+
+    subgraph L5["数据层 — 持久化与缓存"]
+        %% 替换为实际的数据库和缓存服务
+        DB[("主数据库 :5432<br/>PostgreSQL")]
+        Cache[("缓存 :6379<br/>Redis")]
+    end
+
+    %% 替换箭头协议为实际通信方式（如：gRPC、WebSocket、MQ）
+    User --> L1
+    L1 -->|"HTTP/SSE"| L2
+    L2 --> L3
+    L3 -->|"内部调用"| L4
+    L3 -->|"SQL/ORM"| L5
+    L4 -->|"读写"| L5
+    SvcA -->|"REST"| ExtA
+    SvcB -->|"HTTPS"| ExtB
+
+    style L1 fill:#f6f9fe,stroke:#3285c2,stroke-width:2px
+    style L2 fill:#f5fefd,stroke:#23a5b4,stroke-width:2px
+    style L3 fill:#fffbf5,stroke:#ff8000,stroke-width:2px
+    style L4 fill:#f9f7fa,stroke:#834d9d,stroke-width:2px
+    style L5 fill:#f8faf9,stroke:#699261,stroke-width:2px

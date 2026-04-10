@@ -1,0 +1,38 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '20px', 'fontFamily': 'Microsoft YaHei, Arial'}}}%%
+gantt
+    %% 替换 title 中的 [项目名称] 为实际项目名
+    title 项目路线图 — [项目名称]
+
+    %% 替换日期格式（通常保持 YYYY-MM-DD 不变）
+    dateFormat YYYY-MM-DD
+    axisFormat %m/%d
+
+    %% 任务状态：done（已完成）active（进行中）crit（关键路径）milestone（里程碑）
+
+    %% 替换 section 名称为实际迭代/阶段名
+    section Sprint 1: 基础设施
+    %% 替换任务名、状态标签、别名、开始日期和持续时长
+    数据库设计与初始化        :done, s1_db,   2025-01-01, 3d
+    API 框架搭建              :done, s1_api,  after s1_db, 2d
+    基础 CRUD 接口            :done, s1_crud, after s1_api, 3d
+
+    section Sprint 2: 核心功能
+    用户认证模块              :active, s2_auth, after s1_crud, 4d
+    业务逻辑实现              :active, s2_biz,  after s2_auth, 5d
+    前端页面开发              :        s2_fe,   after s2_auth, 5d
+
+    section Sprint 3: 集成与测试
+    第三方 API 集成           :s3_api,  after s2_biz,  3d
+    端到端测试                :s3_test, after s3_api,  3d
+    性能优化                  :s3_perf, after s3_test, 2d
+
+    section Sprint 4: 上线准备
+    %% crit 标记关键路径任务，不可延误
+    文档完善                  :crit, s4_doc,    after s3_perf, 2d
+    部署与发布上线            :crit, s4_deploy, after s4_doc,  2d
+    监控告警配置              :      s4_ops,    after s4_deploy, 3d
+
+    section 未来规划
+    %% 替换为实际的后续功能规划
+    功能扩展A                 :s5_a, after s4_ops, 5d
+    功能扩展B                 :s5_b, after s5_a,   5d
